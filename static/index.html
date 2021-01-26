@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Local Album</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+
+  <script src="https://unpkg.com/vue@next"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+  <div class="container-fluid" id="app">
+    <div class="row mt-1 p-1">
+      <div class="col col-12 col-md-6 col-lg-4 mb-2 px-1" v-for="image in images" :key="`image-${image}`">
+        <img :src="image" alt="" class="w-100">
+      </div>
+    </div>
+  </div>
+  <script>
+    const { onMounted, ref } = Vue;
+
+    const positionImage = () => {
+      const cols = document.querySelectorAll('#app .col');
+
+      const numCols = Math.floor(window.innerWidth/cols[0].offsetWidth);
+
+      for (let i = 0; i < cols.length - numCols; i++){
+        let rowHeight = cols[i].offsetHeight;
+        let imgHeight = cols[i].querySelector('img').offsetHeight;
+        if (rowHeight > imgHeight)
+          cols[i + numCols].style.marginTop = `-${rowHeight - imgHeight}px`;
+      }
+    }
+
+    window.addEventListener('scroll', () => {
+      if (document.documentElement.scrollTop + window.innerHeight >= document.documentElement.scrollHeight - 100) {
+        App.load();
+      }
+    });
+
+    const RawApp = {
+      setup(){
+        const allImages = [];
+        const images = ref([]);
+        let page = 0;
+
+        const load = () => {
+          images.value.push.apply(images.value, allImages.slice(page * 12, (page + 1) * 12));
+          page++;
+
+          setTimeout(() => {
+            positionImage();
+          }, 500)
+        }
+
+        onMounted(async () => {
+          const res = await axios.get('/images');
+          allImages.push.apply(allImages, res.data)
+
+          load();
+        });
+
+        return {
+          images,
+          load
+        };
+      }
+    };
+
+    const App = Vue.createApp(RawApp).mount('#app');
+  </script>
+</body>
+</html>
