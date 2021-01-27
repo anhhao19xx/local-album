@@ -8,8 +8,21 @@ import random
 
 # import album
 STORAGE_DIR = os.environ['STORAGE']
-_, _, filenames = next(walk(STORAGE_DIR))
-filenames = list(map(lambda name: "/storage/%s" % name, filenames))
+def deepGetFile(root, dir):
+  print('Get from ' + (dir if dir else '.'))
+  currentDir = os.path.join(root, dir)
+  filenames = []
+
+  for name in os.listdir(currentDir):
+    item = os.path.join(currentDir, name)
+    if os.path.isfile(item):
+      filenames.append({"dir": dir, "path": "/storage/%s" % os.path.join(dir, name) })
+    if os.path.isdir(item):
+      filenames += deepGetFile(root, os.path.join(dir, name))
+
+  return filenames
+
+filenames = deepGetFile(STORAGE_DIR, '')
 
 # run server
 app = FastAPI()

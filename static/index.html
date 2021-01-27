@@ -24,6 +24,21 @@
       position: absolute;
     }
 
+    #app .col .dir {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      background-color: white;
+      font-size: .8em;
+      padding: 0 8px;
+      border-radius: 10px;
+      opacity: .2;
+    }
+
+    #app .col:hover .dir, #app .col:focus .dir {
+      opacity: 1;
+    }
+
     .hidden {
       opacity: 0;
     }
@@ -33,7 +48,8 @@
   <div class="p-1 pt-2">
     <div id="app">
       <div class="col col-12 col-md-6 col-lg-4 mb-2 px-1 hidden" v-for="image in images" :key="`image-${image}`">
-        <img :src="image" alt="" class="w-100">
+        <div class="dir">root/{{ image.dir }}</div>
+        <img :src="image.path" alt="" class="w-100">
       </div>
     </div>
   </div>
