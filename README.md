@@ -5,9 +5,10 @@ Build with FastAPI and Vue 3.
 ## Usage
 
 ```
+source venv/bin/activate
 pip install -r requirements.txt
 ```
 
 ```bash
-STORAGE=/path/to/storage/dir uvicorn main:app --reload
+./local-album /path/to/storage/dir
 ```
