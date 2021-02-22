@@ -1,6 +1,6 @@
 # Local Album
 
-Build with FastAPI and Vue 3.
+Build with FastAPI and VueJS.
 
 ## Usage
 
