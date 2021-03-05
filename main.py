@@ -22,13 +22,12 @@ def deepGetFile(root, dir):
 
   return filenames
 
-filenames = deepGetFile(STORAGE_DIR, '')
-
 # run server
 app = FastAPI()
 
-@app.get("/images")
-def read_item():
+@app.get("/images/")
+def read_item(dir: str = ''):
+  filenames = deepGetFile(STORAGE_DIR, dir)
   return random.sample(filenames, len(filenames))
 
 app.mount("/storage", StaticFiles(directory=STORAGE_DIR), name="storage")
