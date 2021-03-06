@@ -12,7 +12,7 @@
   <div class="p-1 pt-2">
     <div id="app">
       <button class="btn btn-primary explore" @click="load" v-if="images.length === 0">Explore</button>
-      <div class="navbar d-flex flex-row ">
+      <div class="navbar d-flex ">
         <div>
           <button class="btn btn-none bg-white p-1" @click="init('').then(load)">$</button>
           /
@@ -23,8 +23,9 @@
         <div class="grid-item" v-for="image in images" :key="`image-${image.id}`" tabindex="0">
           <img :src="image.path" alt="" class="w-100" v-if="image.mime.indexOf('video') !== 0" noevent="true">
           <video :src="image.path" class="w-100" v-if="image.mime.indexOf('video') === 0" loop autoplay muted noevent="true"></video>
-          <div class="tools">
+          <div class="tools d-flex justify-content-between">
             <button class="dir" @mousedown.prevent="init(image.dir).then(load)">$/{{ image.dir }}</button>
+            <button class="bg-danger text-white" @mousedown.prevent="remove(image)">Remove</button>
           </div>
         </div>
       </isotope>

@@ -16,7 +16,7 @@ def deepGetFile(root, dir):
   for name in os.listdir(currentDir):
     item = os.path.join(currentDir, name)
     if os.path.isfile(item):
-      filenames.append({"dir": dir, "path": "/storage/%s" % os.path.join(dir, name) })
+      filenames.append({"dir": dir, "path": "/storage/%s" % os.path.join(dir, name), "realPath": os.path.join(dir, name) })
     if os.path.isdir(item):
       filenames += deepGetFile(root, os.path.join(dir, name))
 
@@ -29,6 +29,19 @@ app = FastAPI()
 def read_item(dir: str = ''):
   filenames = deepGetFile(STORAGE_DIR, dir)
   return random.sample(filenames, len(filenames))
+
+@app.delete("/images/")
+def delete_item(path: str = ''):
+  fullPath = os.path.join(STORAGE_DIR, path)
+  try:
+    os.remove(fullPath)
+    return {
+      "ok": 1
+    }
+  except IOError:
+    return {
+      "ok": 0
+    }
 
 app.mount("/storage", StaticFiles(directory=STORAGE_DIR), name="storage")
 app.mount("/", StaticFiles(directory="static", html=True), name="static")

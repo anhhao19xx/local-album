@@ -74,9 +74,13 @@ body {
 
 .grid-item .tools button {
   border: none;
-  background-color: transparent;
-  height: 30px;
-  line-height: 30px;
+  font-size: 12px;
+  height: 24px;
+  line-height: 24px;
+  margin: 3px;
+  margin-left: 0;
+  border-radius: 5px;
+  display: block;
 }
 
 .grid-item:focus .tools {
@@ -85,12 +89,8 @@ body {
 
 .grid-item .tools .dir {
   color: #424242;
-  font-size: 12px;
-  height: 24px;
-  line-height: 24px;
   background-color: white;
-  margin: 3px;
-  border-radius: 5px;
+  margin-left: 3px;
 }
 
 @media screen and (min-width: 960px) {

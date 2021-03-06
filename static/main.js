@@ -22,7 +22,6 @@ const RawApp = {
     isLoad: false,
     images: [],
     nextLoad: false,
-    page: 0,
     id: 0,
     dir: '',
     options: {
@@ -43,12 +42,11 @@ const RawApp = {
 
       this.images.push.apply(
         this.images, 
-        this.allImages.slice(this.page * 12, (this.page + 1) * 12)
+        this.allImages.slice(this.images.length, this.images.length + 12)
         .map(img => {
           return Object.assign({}, img, { id: this.id++, mime: mime.getType(img.path) });
         })
       );
-      this.page++;
 
       this.isLoad = false;
 
@@ -66,10 +64,16 @@ const RawApp = {
       this.images = [];
       this.nextLoad = false;
       this.isLoad = false;
-      this.page = 0;
       this.dir = dir;
       document.body.scrollTop = 0; // For Safari
       document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+    },
+
+    async remove(img){
+      this.images.splice(this.images.indexOf(img), 1)
+      this.allImages.splice(this.allImages.indexOf(img), 1)
+
+      await axios.delete(`/images/?path=${img.realPath}`);
     }
   },
   async mounted(){
