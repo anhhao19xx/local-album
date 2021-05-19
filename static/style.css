@@ -47,15 +47,19 @@ body {
   border-radius: 10px;
 }
 
-.grid-item img, .grid-item video {
+.grid-item .mediaWrapper {
   border-radius: 5px;
+  overflow: hidden;
   z-index: 10;
   position: relative;
   transition: all .3s;
+}
+
+.grid-item img, .grid-item video {
   display: block;
 }
 
-.grid-item:focus img, .grid-item:focus video {
+.grid-item:focus .mediaWrapper {
   box-shadow: 0 2px 3px rgb(0 0 0 / 30%);
   margin-top: -30px;
 }

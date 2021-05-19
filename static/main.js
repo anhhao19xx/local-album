@@ -74,6 +74,15 @@ const RawApp = {
       this.allImages.splice(this.allImages.indexOf(img), 1)
 
       await axios.delete(`/images/?path=${img.realPath}`);
+    },
+
+    async info(img){
+      const { data } = await axios.get(`/info/?path=${img.realPath}`);
+      this.$set(img, 'faces', data.faces);
+    },
+
+    formatDir(dir){
+      return dir.replace('./', '');
     }
   },
   async mounted(){

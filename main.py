@@ -22,26 +22,36 @@ def deepGetFile(root, dir):
 
   return filenames
 
+# get images
+filenames = deepGetFile(STORAGE_DIR, '.')
+
 # run server
 app = FastAPI()
 
 @app.get("/images/")
 def read_item(dir: str = ''):
-  filenames = deepGetFile(STORAGE_DIR, dir)
-  return random.sample(filenames, len(filenames))
+  if dir == '.' or dir == '':
+    selected_files = filenames
+  else:
+    selected_files = list(filter(lambda x: x['dir'] == dir, filenames))
+  return random.sample(selected_files, len(selected_files))
 
 @app.delete("/images/")
 def delete_item(path: str = ''):
   fullPath = os.path.join(STORAGE_DIR, path)
-  try:
-    os.remove(fullPath)
-    return {
-      "ok": 1
-    }
-  except IOError:
-    return {
-      "ok": 0
-    }
+  os.remove(fullPath)
+  return {
+    "ok": 1
+  }
+
+@app.get("/info/")
+def info_item(path: str = ''):
+  fullPath = os.path.join(STORAGE_DIR, path)
+  return {
+    'faces': [
+      [20, 20, 50, 50]
+    ]
+  }
 
 app.mount("/storage", StaticFiles(directory=STORAGE_DIR), name="storage")
 app.mount("/", StaticFiles(directory="static", html=True), name="static")
