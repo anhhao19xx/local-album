@@ -1,104 +1,17 @@
-body {
-  overflow-x: hidden;
-}
-
-.explore {
-  font-size: 2em;
+/*** PRESENTATION ***/
+.presentation {
   position: fixed;
-  top: 50%;
-  left: 50%;
-  width: 5em;
-  height: 2em;
-  margin-top: -1em;
-  margin-left: -2.5em;
-}
-
-.navbar {
-  position: fixed;
-  height: 40px;
-  line-height: 30px;
-  bottom: -35px;
+  top: 0;
   left: 0;
   width: 100%;
-  padding: 5px;
-  background-color: #d0d0d0;
-  font-size: 12px;
-  z-index: 11;
-  border-top: 5px solid #212121;
-  transition: all .3s;
+  height: 100%;
+  z-index: 100;
+  background-color: black;
 }
 
-.navbar:hover {
-  border-top: 1px solid #212121;
-  bottom: 0;
-}
-
-.navbar button {
-  font-size: 12px;
-  height: 30px;
-}
-
-.grid-item {
-  height: fit-content;
+.presentation img, .presentation video {
+  object-fit: contain;
   width: 100%;
-  padding: 5px;
-  outline: none;
-  overflow: hidden;
-  border-radius: 10px;
+  height: 100%;
 }
-
-.grid-item .mediaWrapper {
-  border-radius: 5px;
-  overflow: hidden;
-  z-index: 10;
-  position: relative;
-  transition: all .3s;
-}
-
-.grid-item img, .grid-item video {
-  display: block;
-}
-
-.grid-item:focus .mediaWrapper {
-  box-shadow: 0 2px 3px rgb(0 0 0 / 30%);
-  margin-top: -30px;
-}
-
-.grid-item .tools {
-  height: 40px;
-  z-index: 9;
-  position: relative;
-  background-color: #d0d0d0;
-  overflow: hidden;
-  border-radius: 5px;
-  margin-top: -40px;
-  padding-top: 10px;
-  transition: all .3s;
-}
-
-.grid-item .tools button {
-  border: none;
-  font-size: 12px;
-  height: 24px;
-  line-height: 24px;
-  margin: 3px;
-  margin-left: 0;
-  border-radius: 5px;
-  display: block;
-}
-
-.grid-item:focus .tools {
-  margin-top: -10px;
-}
-
-.grid-item .tools .dir {
-  color: #424242;
-  background-color: white;
-  margin-left: 3px;
-}
-
-@media screen and (min-width: 960px) {
-  .grid-item {
-    width: calc(33.33%);
-  }
-}
+/*** END PRESENTATION ***/
