@@ -8,7 +8,8 @@ const App = new Vue({
     mode: 'presentation',
 
     // presentation mode
-    current: 0
+    current: 0,
+    isNext: true
   },
   computed: {
     slideImage(){
@@ -19,17 +20,7 @@ const App = new Vue({
     }
   }, 
   methods: {
-    load(){
-      this.images.push.apply(
-        this.images, 
-        this.allImages.slice(this.images.length, this.images.length + LIMIT)       
-      );
-    },
-    start(){
-      setInterval(() => {
-        this.current++;
-      }, 5000);
-    },
+    // system
     async init(dir){
       const res = await axios.get(`/images/?dir=${dir}`);
       this.images = res.data
@@ -38,6 +29,52 @@ const App = new Vue({
         });
 
       this.start();
+    },
+
+    load(){
+      this.images.push.apply(
+        this.images, 
+        this.allImages.slice(this.images.length, this.images.length + LIMIT)       
+      );
+    },
+
+    keyHandle(e){
+      if (this.mode === 'presentation'){
+        switch (e.key){
+          case 'ArrowRight':
+            this.nextSlide();
+            break;
+          case 'ArrowLeft':
+            this.prevSlide();
+            break;
+        }
+      }
+    },  
+
+    // presentation
+    start(){
+      setInterval(() => {
+        if (!this.isNext){
+          this.isNext = true;
+          return;
+        }
+
+        this.current++;
+      }, 5000);
+    },
+
+    nextSlide(){
+      if (this.current < this.images.length - 1){
+        this.current++;
+        this.isNext = false;
+      }
+    },
+
+    prevSlide(){
+      if (this.current > 0){
+        this.current++;
+        this.isNext = false;
+      }
     }
   },
   async mounted(){
