@@ -66,15 +66,21 @@ const App = new Vue({
     nextSlide(){
       if (this.current < this.images.length - 1){
         this.current++;
-        this.isNext = false;
+      } else {
+        this.current = 0;
       }
+
+      this.isNext = false;
     },
 
     prevSlide(){
       if (this.current > 0){
-        this.current++;
-        this.isNext = false;
+        this.current--;
+      } else {
+        this.current = this.images.length - 1;
       }
+
+      this.isNext = false;
     }
   },
   async mounted(){
