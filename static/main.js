@@ -60,6 +60,9 @@ const App = new Vue({
         }
 
         this.current++;
+
+        if (this.current >= this.images.length)
+          this.current = 0;
       }, 5000);
     },
 
