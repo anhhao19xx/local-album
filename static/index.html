@@ -19,6 +19,10 @@
     <div class="display">
       <!-- PRESENTATION MODE -->
       <div class="presentation" v-if="mode === 'presentation' && slideImage">
+        <!-- PROGRESS BAR -->
+        <div class="progress"><div class="current" :style="{ width: progress + '%' }"></div></div>
+        <!-- END PROGRESS BAR -->
+
         <img :src="slideImage.path" alt="" class="w-100" v-if="slideImage.mime.indexOf('video') !== 0" noevent="true">
         <video :src="slideImage.path" class="w-100" v-if="slideImage.mime.indexOf('video') === 0" loop autoplay muted noevent="true"></video>
 

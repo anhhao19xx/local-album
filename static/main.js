@@ -1,4 +1,5 @@
 const LIMIT = 12;
+const DURATION = 5000;
 
 const App = new Vue({
   el: '#app',
@@ -8,6 +9,9 @@ const App = new Vue({
     mode: 'presentation',
 
     // presentation mode
+    lastTime: 0,
+    progress: 0,
+
     current: 0,
     isNext: true
   },
@@ -52,18 +56,36 @@ const App = new Vue({
     },  
 
     // presentation
+    loop(){
+      requestAnimationFrame(() => {
+        this.loop()
+      });
+
+      const now = Date.now();
+      const duration = now - this.lastTime;
+      this.progress = duration/DURATION*100;
+
+      if (duration < DURATION)
+        return;
+
+      this.lastTime = now;
+
+      if (!this.isNext){
+        this.isNext = true;
+        return;
+      }
+
+      this.current++;
+
+      if (this.current >= this.images.length)
+        this.current = 0;
+
+    },
+
     start(){
-      setInterval(() => {
-        if (!this.isNext){
-          this.isNext = true;
-          return;
-        }
+      this.lastTime = Date.now();
 
-        this.current++;
-
-        if (this.current >= this.images.length)
-          this.current = 0;
-      }, 5000);
+      this.loop();
     },
 
     nextSlide(){
