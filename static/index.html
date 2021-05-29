@@ -18,7 +18,7 @@
 
     <div class="display">
       <!-- PRESENTATION MODE -->
-      <div class="presentation" v-if="mode === 'presentation' && slideImage">
+      <div class="presentation" v-if="mode === 'presentation' && slideImage" @mousemove="mouseMove">
         <!-- PROGRESS BAR -->
         <div class="progress"><div class="current" :style="{ width: progress + '%' }"></div></div>
         <!-- END PROGRESS BAR -->
@@ -27,7 +27,7 @@
         <video :src="slideImage.path" class="w-100" v-if="slideImage.mime.indexOf('video') === 0" loop autoplay muted noevent="true"></video>
 
         <!-- TOOLS -->
-        <div class="tools">
+        <div class="tools" :show="isShowTools">
           <button class="control-btn left" @click="prevSlide">
             <i class="icon-arrow-left"></i>
           </button>

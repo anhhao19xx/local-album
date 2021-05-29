@@ -13,7 +13,8 @@ const App = new Vue({
     progress: 0,
 
     current: 0,
-    isNext: true
+    isNext: true,
+    isShowTools: true
   },
   computed: {
     slideImage(){
@@ -65,11 +66,20 @@ const App = new Vue({
       const duration = now - this.lastTime;
       this.progress = duration/DURATION*100;
 
+      // mouse over
+      if (now - this.lastMouseMove < DURATION){
+        this.isShowTools = true;
+      } else {
+        this.isShowTools = false;
+      }
+
+      // when reach duration
       if (duration < DURATION)
         return;
 
       this.lastTime = now;
 
+      // next slide
       if (!this.isNext){
         this.isNext = true;
         return;
@@ -83,6 +93,7 @@ const App = new Vue({
     },
 
     start(){
+      this.lastMouseMove = 
       this.lastTime = Date.now();
 
       this.loop();
@@ -106,6 +117,11 @@ const App = new Vue({
       }
 
       this.isNext = false;
+    },
+
+    mouseMove(){
+      this.lastMouseMove = Date.now();
+      this.isShowTools = true;
     }
   },
   async mounted(){

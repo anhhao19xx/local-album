@@ -30,13 +30,23 @@
 
 .presentation .tools button.control-btn {
   top: 50%;
+  transition: all .3s;
 }
 
 .presentation .tools button.control-btn.left {
-  left: 5%;
+  left: -5%;
 }
 
 .presentation .tools button.control-btn.right {
+  right: -5%;
+}
+
+
+.presentation .tools[show] button.control-btn.left {
+  left: 5%;
+}
+
+.presentation .tools[show] button.control-btn.right {
   right: 5%;
 }
 
