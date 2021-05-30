@@ -12,6 +12,9 @@ const App = new Vue({
     lastTime: 0,
     progress: 0,
 
+    lastPause: 0,
+    isPaused: false,
+
     current: 0,
     isNext: true,
     isShowTools: true
@@ -63,8 +66,6 @@ const App = new Vue({
       });
 
       const now = Date.now();
-      const duration = now - this.lastTime;
-      this.progress = duration/DURATION*100;
 
       // mouse over
       if (now - this.lastMouseMove < DURATION){
@@ -72,6 +73,12 @@ const App = new Vue({
       } else {
         this.isShowTools = false;
       }
+
+      if (this.isPaused)
+        return;
+
+      const duration = now - this.lastTime;
+      this.progress = duration/DURATION*100;
 
       // when reach duration
       if (duration < DURATION)
@@ -122,6 +129,16 @@ const App = new Vue({
     mouseMove(){
       this.lastMouseMove = Date.now();
       this.isShowTools = true;
+    },
+
+    mouseDown(){
+      this.isPaused = true;
+      this.lastPause = Date.now();
+    },
+
+    mouseUp(){
+      this.isPaused = false;
+      this.lastTime = Date.now() - (this.lastPause - this.lastTime);
     }
   },
   async mounted(){
