@@ -41,6 +41,11 @@
   right: -3em;
 }
 
+.presentation .tools button.control-btn.top-right {
+  top: -3em;
+  right: -3em;
+}
+
 
 .presentation .tools[show] button.control-btn.left {
   left: 5%;
@@ -49,6 +54,12 @@
 .presentation .tools[show] button.control-btn.right {
   right: 5%;
 }
+
+.presentation .tools[show] button.control-btn.top-right {
+  top: 5%;
+  right: 5%;
+}
+
 
 .presentation .progress {
   height: 2px;

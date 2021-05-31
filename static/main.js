@@ -139,6 +139,28 @@ const App = new Vue({
     mouseUp(){
       this.isPaused = false;
       this.lastTime = Date.now() - (this.lastPause - this.lastTime);
+    },
+
+    fullScreen(){
+      const body = document.body;
+
+      if (window.innerHeight == screen.height && window.innerWidth == screen.width){ // close fullscreen
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) { /* Safari */
+          document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) { /* IE11 */
+          document.msExitFullscreen();
+        }
+      } else { // request fullscreen
+        if (body.requestFullscreen) {
+          body.requestFullscreen();
+        } else if (body.webkitRequestFullscreen) { /* Safari */
+          body.webkitRequestFullscreen();
+        } else if (body.msRequestFullscreen) { /* IE11 */
+          body.msRequestFullscreen();
+        }
+      }
     }
   },
   async mounted(){
