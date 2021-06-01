@@ -9,6 +9,7 @@ const App = new Vue({
     mode: 'presentation',
 
     // presentation mode
+    defaultDuration: DURATION,
     lastTime: 0,
     progress: 0,
 
@@ -16,15 +17,37 @@ const App = new Vue({
     isPaused: false,
 
     current: 0,
-    isNext: true,
     isShowTools: true
   },
   computed: {
     slideImage(){
-      if (!this.images[this.current])
+      const media = this.images[this.current];
+
+      if (!media)
         return null;
 
-      return this.images[this.current];
+      if (media.mime.indexOf('video') === 0){
+        this.$nextTick(() => {
+          const video = this.$refs.slideVideo;
+          this.isPaused = true;
+
+          video.addEventListener('durationchange', () => {
+            this.progress = (video.currentTime/video.duration)*100;
+          });
+
+          video.addEventListener('timeupdate', (event) => {
+            this.progress = (video.currentTime/video.duration)*100;
+          });
+
+          video.addEventListener('ended', () => {
+            this.defaultDuration = DURATION;
+            this.nextSlide();
+            this.isPaused = false;
+          });
+        });
+      }
+
+      return media;
     }
   }, 
   methods: {
@@ -78,20 +101,15 @@ const App = new Vue({
         return;
 
       const duration = now - this.lastTime;
-      this.progress = duration/DURATION*100;
+      this.progress = duration/this.defaultDuration*100;
 
       // when reach duration
-      if (duration < DURATION)
+      if (duration < this.defaultDuration)
         return;
 
       this.lastTime = now;
 
-      // next slide
-      if (!this.isNext){
-        this.isNext = true;
-        return;
-      }
-
+      // auto next slide
       this.current++;
 
       if (this.current >= this.images.length)
@@ -113,7 +131,7 @@ const App = new Vue({
         this.current = 0;
       }
 
-      this.isNext = false;
+      this.lastTime = Date.now();
     },
 
     prevSlide(){
@@ -123,7 +141,7 @@ const App = new Vue({
         this.current = this.images.length - 1;
       }
 
-      this.isNext = false;
+      this.lastTime = Date.now();
     },
 
     mouseMove(){

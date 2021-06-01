@@ -24,7 +24,7 @@
         <!-- END PROGRESS BAR -->
 
         <img :src="slideImage.path" alt="" class="w-100" v-if="slideImage.mime.indexOf('video') !== 0" noevent="true">
-        <video :src="slideImage.path" class="w-100" v-if="slideImage.mime.indexOf('video') === 0" loop autoplay muted noevent="true"></video>
+        <video :src="slideImage.path" class="w-100" v-if="slideImage.mime.indexOf('video') === 0" autoplay muted noevent="true" ref="slideVideo"></video>
 
         <!-- TOOLS -->
         <div class="tools" :show="isShowTools">
