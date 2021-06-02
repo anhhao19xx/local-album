@@ -21,6 +21,12 @@ const App = new Vue({
   },
   computed: {
     slideImage(){
+      // preload the next
+      const next = this.images[this.nextCurrent];
+      if (next && next.mime.indexOf('image') === 0){
+        (new Image()).src = next.path;
+      }
+
       const media = this.images[this.current];
 
       if (!media)
@@ -48,6 +54,14 @@ const App = new Vue({
       }
 
       return media;
+    },
+
+    nextCurrent(){
+      if (this.current < this.images.length - 1){
+        return this.current + 1;
+      } else {
+        return 0;
+      }
     }
   }, 
   methods: {
@@ -125,12 +139,7 @@ const App = new Vue({
     },
 
     nextSlide(){
-      if (this.current < this.images.length - 1){
-        this.current++;
-      } else {
-        this.current = 0;
-      }
-
+      this.current = this.nextCurrent;
       this.lastTime = Date.now();
     },
 
