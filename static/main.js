@@ -92,6 +92,13 @@ const App = new Vue({
           case 'ArrowLeft':
             this.prevSlide();
             break;
+          case ' ':
+            if (this.isPaused){
+              this.mouseUp();
+            } else {
+              this.mouseDown();
+            }
+            break;
         }
       }
     },  
