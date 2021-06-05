@@ -23,7 +23,21 @@ def get_stat(file_path):
     'updated_at': ctime if ctime > mtime else mtime
   }
 
+def get_item(root, relative_path):
+  absolute_path = os.path.join(root, relative_path)
+
+  if not os.path.exists(absolute_path):
+    return None
+
+  return {
+    'path': relative_path,
+    'mime': get_type(absolute_path),
+    **get_stat(absolute_path)
+  }
+
 def scan_dir(root, dir = ''):
+  print('Get from ' + (dir if dir else '.'))
+  
   absolute_dir_path = os.path.join(root, dir)
   item_list = []
 
@@ -31,14 +45,9 @@ def scan_dir(root, dir = ''):
     if name[0] == '.':
       continue
 
-    absolute_item_path = os.path.join(absolute_dir_path, name)
     relative_item_path = os.path.join(dir, name)
 
-    item = {
-      'path': relative_item_path,
-      'mime': get_type(absolute_item_path),
-      **get_stat(absolute_item_path)
-    }
+    item = get_item(root, relative_item_path)
 
     item_list.append(item)
 
