@@ -69,18 +69,15 @@ const App = new Vue({
     async init(dir){
       const res = await axios.get(`/images/?dir=${dir}`);
       this.images = res.data
+        .filter(item => item.mime.indexOf('image') === 0 || item.mime.indexOf('video') === 0)
         .map(img => {
-          return Object.assign({}, img, { id: this.id++, mime: mime.getType(img.path) });
+          return {
+            ...img,
+            path: `/storage/${img.path}`
+          };
         });
 
       this.start();
-    },
-
-    load(){
-      this.images.push.apply(
-        this.images, 
-        this.allImages.slice(this.images.length, this.images.length + LIMIT)       
-      );
     },
 
     keyHandle(e){

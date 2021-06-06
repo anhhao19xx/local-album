@@ -1,58 +1,49 @@
-import uvicorn
 import os
-from typing import Optional
+import uvicorn
 
+from pprint import pprint
+from src.vision import get_faces
+from tinydb import TinyDB, Query
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
-from os import walk
-import random
 
-# import album
+from src.scan import scan_dir, get_item
+
+# Resources preparation
 STORAGE_DIR = os.environ['STORAGE']
-def deepGetFile(root, dir):
-  print('Get from ' + (dir if dir else '.'))
-  currentDir = os.path.join(root, dir)
-  filenames = []
+db = TinyDB(os.path.join(STORAGE_DIR, '.db'))
 
-  for name in os.listdir(currentDir):
-    item = os.path.join(currentDir, name)
-    if os.path.isfile(item):
-      filenames.append({"dir": dir, "path": "/storage/%s" % os.path.join(dir, name), "realPath": os.path.join(dir, name) })
-    if os.path.isdir(item):
-      filenames += deepGetFile(root, os.path.join(dir, name))
+item_list = scan_dir(STORAGE_DIR)
 
-  return filenames
+table = db.table('items')
+Item = Query()
 
-# get images
-filenames = deepGetFile(STORAGE_DIR, '.')
+for item in table.all():
+  new_item = get_item(STORAGE_DIR, item['path'])
+  if new_item is None:
+    table.remove(doc_ids=[item.doc_id])
 
-# run server
+for raw_item in item_list:
+  item = table.get(Item.path == raw_item['path'])
+  if item:
+    continue
+  
+  if raw_item['mime'] and raw_item['mime'].find('image') == 0:
+    print('Scan faces in %s' % raw_item['path'])
+    raw_item['faces'] = get_faces(os.path.join(STORAGE_DIR, raw_item['path'])).tolist()
+
+  table.insert(raw_item)
+
+# Server listener
 app = FastAPI()
 
 @app.get("/images/")
-def read_item(dir: str = ''):
-  if dir == '.' or dir == '':
-    selected_files = filenames
-  else:
-    selected_files = list(filter(lambda x: x['dir'] == dir, filenames))
-  return random.sample(selected_files, len(selected_files))
+def read_item():
+  items = table.all()
+  for item in items:
+    item['id'] = item.doc_id
 
-@app.delete("/images/")
-def delete_item(path: str = ''):
-  fullPath = os.path.join(STORAGE_DIR, path)
-  os.remove(fullPath)
-  return {
-    "ok": 1
-  }
-
-@app.get("/info/")
-def info_item(path: str = ''):
-  fullPath = os.path.join(STORAGE_DIR, path)
-  return {
-    'faces': [
-      [20, 20, 50, 50]
-    ]
-  }
+  return items
 
 app.mount("/storage", StaticFiles(directory=STORAGE_DIR), name="storage")
 app.mount("/", StaticFiles(directory="static", html=True), name="static")
