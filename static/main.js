@@ -192,6 +192,10 @@ const App = new Vue({
           body.msRequestFullscreen();
         }
       }
+    },
+
+    faceTag(width, height, face){
+      return `left: ${face[0]/width*100}%; top: ${face[1]/height*100}%; width: ${face[2]/width*100}%; height: ${face[3]/height*100}%;`
     }
   },
   async mounted(){

@@ -30,7 +30,23 @@ for raw_item in item_list:
   
   if raw_item['mime'] and raw_item['mime'].find('image') == 0:
     print('Scan faces in %s' % raw_item['path'])
-    raw_item['faces'] = get_faces(os.path.join(STORAGE_DIR, raw_item['path'])).tolist()
+    width, height, raw_faces = get_faces(os.path.join(STORAGE_DIR, raw_item['path']))
+
+    faces = []
+    face_id = 0
+    for face in raw_faces:
+      faces.append({
+        'id': face_id,
+        'tag': None,
+        'pos': face
+      })
+      face_id += 1
+
+    raw_item['image'] = {
+      'width': width,
+      'height': height,
+      'faces': faces
+    }
 
   table.insert(raw_item)
 
