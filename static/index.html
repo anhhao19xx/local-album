@@ -18,7 +18,7 @@
 
     <div class="display">
       <!-- PRESENTATION MODE -->
-      <div class="presentation" v-if="mode === 'presentation' && slideImage" @mousemove="mouseMove" @mousedown="mouseDown" @mouseup="mouseUp">
+      <div class="presentation" v-if="mode === 'presentation' && slideImage" @mousemove="mouseMove">
         <!-- PROGRESS BAR -->
         <div class="progress"><div class="current" :style="{ width: progress + '%' }"></div></div>
         <!-- END PROGRESS BAR -->

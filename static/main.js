@@ -91,9 +91,11 @@ const App = new Vue({
             break;
           case ' ':
             if (this.isPaused){
-              this.mouseUp();
+              this.isPaused = false;
+              this.lastTime = Date.now() - (this.lastPause - this.lastTime);
             } else {
-              this.mouseDown();
+              this.isPaused = true;
+              this.lastPause = Date.now();
             }
             break;
         }
@@ -160,16 +162,6 @@ const App = new Vue({
     mouseMove(){
       this.lastMouseMove = Date.now();
       this.isShowTools = true;
-    },
-
-    mouseDown(){
-      this.isPaused = true;
-      this.lastPause = Date.now();
-    },
-
-    mouseUp(){
-      this.isPaused = false;
-      this.lastTime = Date.now() - (this.lastPause - this.lastTime);
     },
 
     fullScreen(){
